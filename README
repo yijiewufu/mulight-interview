@@ -1,0 +1,54 @@
+This project is for interview only!!!
+
+HOW TO RUN THIS PROJECT:
+Clone this resource code from master branch and use eclipse/IDEA to load the project. Then find module : interview-presentaion, then
+find the entrence class in package : com.mulight.interview.presentation. Right click and choose run as an Spring Boot App.
+
+How I build this project:
+1. Determine to use DDD to design this project;
+2. Determine how many domains will be needed to finish this function. And first thought comes up with: product, price(including discount), inventory,
+   checkout;
+3. Determine what action should be taken in each domain to fulfil this function. And that will be :
+   product domain : product model can provide product infomation;(but we do not need it now. But I will still keep this domain anyway to 
+   make this system reasonable);
+   price domain: price model will provide price and discount details(normalPrice, discountUnit, discountUnitPrice, startDate, endDate 
+   ect);
+   inventory domain: inventory model will provide inventory details, like how many x product left;
+   checkout domain: checkout domain will calculate customer's purchasing list.
+4. Determine checkout sequence: WatchCheckOutService -> WatchCheckout -> WatchInventoryService -> WatchInventory -> 
+    WatchPriceService -> WatchPrice & WatchDiscount;
+5. Determine which domain's function is most complex and should be spent more time to check and build. And other domain's action should just
+   fetch data from DB, redis or other resource;
+6. Build a pom project with 4 moudules;
+7. Add a health check controller and start up to test if it is working;
+8. Build domain and domain's action in module : "interview-domain" and provide DB action's to support domain's action in module: 
+   "interview-infrastructure";
+9. Aggregate domain's action in one service(WatchCheckOutService) in module : "interview-application";
+10. Build post controller with "/checkout" using WatchCheckOutService to return the total amount of the purchasing list;
+11. Build auto tests. Will build a set of input lists to call WatchCheckOutService and compare the output with the correct amount.
+   (I do suggest we can have test teams to fulfil this part because from different views they can found bugs and help us to build robust 
+    applications)
+
+Checkout algorithm design：
+-------choose right data type ----- 
+1. Using List<Integer> as an input, because it does not have an limite size and meanwhile it can have repeated values;
+2. Use Integer as watch id and it can be primary key in product table with DB bigint;
+3. Use BigInteger to build product price, discount prices and product amount since there is no limit of the product unit amount and
+   so does the checkout money amout since all the prices are integer not float;(but we do need to check server's memory size because 
+   BigInteger is limited by memory's size);
+----calculate part ------
+4. Iterate the purchasing list , count each watch types and put the result into a hashmap<Integer, Integer>;
+5. Iterate map's keyset, check if have enough amout left in the inventory -> if yes fetch price (including discount), if no return error
+   telling customers that how many left availabe -> check each watch type if it has discount and calculate each product's total money 
+   amount -> sum all watch's type;
+6. To iterate input list, use parallelStream because we are facing unlimited amount product, we need to make it faster. So we need to
+   use ConcurrentHashMap;
+7. To fetch the discount and price we also using parallelStream to query the DB, because we are facing unlimited combination of products;
+
+Improve in future:
+1. We may need to split each domain part to reuse. If we have resued domains we can produce new applications as fast as we can to satisfy
+   every kind of customer needs and saving lots of resouce;
+2. Involve dubbo/eruka, zookeeper, hystrix, MQ ect middleware things to connect each domain to fulfil complex using;
+3. We may need to add BFF layer to provide different api for different OS and gateway to control, limit, count, loadbalence and lead requests;
+4. We will need to add new domains basing on the requirements, like user domain to involve security issue and limit user's actions basing on roles or profile ect;
+5. We need to change price to bigdecimal, because not all the price are integer;
