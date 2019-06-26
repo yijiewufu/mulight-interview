@@ -1,0 +1,6 @@
+com\mulight\interview\infrastructure\price\model\PriceModel.class
+com\mulight\interview\infrastructure\product\repository\ProductRepository.class
+com\mulight\interview\infrastructure\discount\model\DiscountModel.class
+com\mulight\interview\infrastructure\price\repository\PriceRepository.class
+com\mulight\interview\infrastructure\product\model\ProductModel.class
+com\mulight\interview\infrastructure\discount\repository\DiscountRepository.class
