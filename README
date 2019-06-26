@@ -15,8 +15,8 @@ How I build this project:
    ect);
    inventory domain: inventory model will provide inventory details, like how many x product left;
    checkout domain: checkout domain will calculate customer's purchasing list.
-4. Determine checkout sequence: WatchCheckOutService -> WatchCheckout -> WatchInventoryService -> WatchInventory -> 
-    WatchPriceService -> WatchPrice & WatchDiscount;
+4. Determine checkout sequence: CheckOutService -> ProductCheckout -> ProductInventoryService -> ProductInventory -> 
+    PriceService -> ProductPrice & ProductDiscount;
 5. Determine which domain's function is most complex and should be spent more time to check and build. And other domain's action should just
    fetch data from DB, redis or other resource;
 6. Build a pom project with 4 moudules;
@@ -52,3 +52,5 @@ Improve in future:
 3. We may need to add BFF layer to provide different api for different OS and gateway to control, limit, count, loadbalence and lead requests;
 4. We will need to add new domains basing on the requirements, like user domain to involve security issue and limit user's actions basing on roles or profile ect;
 5. We need to change price to bigdecimal, because not all the price are integer;
+6. Restful API has limited size of params, so if we use list, we will need front end team to split the list into groups like 100 ids per call then they sum total 
+   in front end to display; 
