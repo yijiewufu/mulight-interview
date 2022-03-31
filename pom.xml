@@ -22,7 +22,7 @@
 	</modules>
 	<properties>
 		<java.version>1.8</java.version>
-		<springboot.version>2.1.6.RELEASE</springboot.version>
+		<springboot.version>2.5.12</springboot.version>
 		<interview-application.version>0.0.1-SNAPSHOT</interview-application.version>
 		<interview-domain.version>0.0.1-SNAPSHOT</interview-domain.version>
 		<interview-infrastructure.version>0.0.1-SNAPSHOT</interview-infrastructure.version>
